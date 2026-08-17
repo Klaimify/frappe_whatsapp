@@ -177,9 +177,10 @@ class WhatsAppNotification(Document):
                 if self.attach_from_field:
                     file_url = doc_data[self.attach_from_field]
                     if not file_url.startswith("http"):
-                        # get share key so that private files can be sent
-                        key = doc.get_document_share_key()
-                        file_url = f'{frappe.utils.get_url()}{file_url}&key={key}'
+                        if file_url.startswith("/private/files/"):
+                            # get share key so that private files can be sent
+                            key = doc.get_document_share_key()
+                            file_url = f'{frappe.utils.get_url()}{file_url}?key={key}'
                 else:
                     file_url = self.attach
 
